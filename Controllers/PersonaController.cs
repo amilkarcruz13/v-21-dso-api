@@ -14,17 +14,17 @@ namespace ApiEstudiantes.Controllers
     [ApiController]
     public class PersonaController : ControllerBase
     {
-        private readonly AppDbContext context;
-        public PersonaController(AppDbContext _context)
+        private readonly AppDbContext _context;
+        public PersonaController(AppDbContext context)
         {
-            this.context = _context;
+            this._context = context;
         }
         [HttpGet]
         public ActionResult GetAll()
         {
             try
             {
-                return Ok(context.persona.ToList());
+                return Ok(_context.persona.ToList());
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace ApiEstudiantes.Controllers
         {
             try
             {
-                var persona = context.persona.FirstOrDefault(persona => persona.id == id);
+                var persona = _context.persona.FirstOrDefault(persona => persona.id == id);
                 return Ok(persona);
             }
             catch(Exception ex)
@@ -49,8 +49,8 @@ namespace ApiEstudiantes.Controllers
         {
             try
             {
-                context.persona.Add(persona);
-                context.SaveChanges();
+                _context.persona.Add(persona);
+                _context.SaveChanges();
                 return CreatedAtRoute("GetById", new { persona.id }, persona);
             }
             catch(Exception ex)
@@ -65,8 +65,8 @@ namespace ApiEstudiantes.Controllers
             {
                 if(persona.id == id)
                 {
-                    context.Entry(persona).State = EntityState.Modified;
-                    context.SaveChanges();
+                    _context.Entry(persona).State = EntityState.Modified;
+                    _context.SaveChanges();
                     return CreatedAtRoute("GetById", new { id = persona.id }, persona);
                 }
                 else
@@ -84,11 +84,11 @@ namespace ApiEstudiantes.Controllers
         {
             try
             {
-                var persona = context.persona.FirstOrDefault(p => p.id == id);
+                var persona = _context.persona.FirstOrDefault(p => p.id == id);
                 if (persona != null)
                 {
-                    context.persona.Remove(persona);
-                    context.SaveChanges();
+                    _context.persona.Remove(persona);
+                    _context.SaveChanges();
                     return Ok(id);
                 }
                 else
