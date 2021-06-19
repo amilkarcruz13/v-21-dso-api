@@ -23,7 +23,7 @@ namespace ApiEstudiantes.Controllers
         {
             try
             {
-                return Ok(_context.estudiante.Include(e => e.persona).ToList());
+                return Ok(_context.estudiante.Include(e => e.persona).Include(e=> e.carrera).ToList());
             }
             catch (Exception ex)
             {
@@ -31,6 +31,18 @@ namespace ApiEstudiantes.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpGet("{id}")]
+        public ActionResult Get(int id)
+        {
+            try
+            {
+                var estudiante = _context.estudiante.Include(e => e.persona).Include(e => e.carrera).FirstOrDefault(e => e.id == id);
+                return Ok(estudiante);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
